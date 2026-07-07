@@ -4,7 +4,101 @@
 
 A GenAI-powered, multi-role assistant that optimizes stadium operations and elevates the FIFA World Cup 2026 experience for fans, volunteers/staff, and ops control rooms. Powered by **Google Gemini** via the Lovable AI Gateway, backed by Lovable Cloud (Postgres + Auth), and designed for Google Maps Platform + Google Calendar integration.
 
-**Live URL:** _(preview URL provided in Lovable dashboard)_
+# ⚽ PitchOps — Smart Stadiums & Tournament Operations (FIFA World Cup 2026)
+
+<div align="center">
+
+## 🚀 Google Prompt Wars • Challenge 04
+
+A GenAI-powered platform to optimize stadium operations and enhance the FIFA World Cup 2026 experience through intelligent, real-time assistance.
+
+<br>
+
+<img src="assets/google-for-developers.png" height="60" alt="Google for Developers"/>
+&nbsp;&nbsp;&nbsp;
+<img src="assets/promptwars.png" height="60" alt="PromptWars"/>
+&nbsp;&nbsp;&nbsp;
+<img src="assets/hack2skill.png" height="60" alt="Hack2Skill"/>
+
+<br><br>
+
+[![Google for Developers](https://img.shields.io/badge/Google_For_Developers-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/)
+[![PromptWars](https://img.shields.io/badge/PromptWars-Challenge_04-blueviolet?style=for-the-badge)](https://promptwars.in/)
+[![Hack2Skill](https://img.shields.io/badge/Hack2Skill-Hackathon-orange?style=for-the-badge)](https://hack2skill.com/)
+[![Google Gemini](https://img.shields.io/badge/Powered_by-Google_Gemini-4285F4?style=for-the-badge)](https://ai.google.dev/)
+
+</div>
+
+---
+
+# 🌍 About The Project
+
+PitchOps is a **Generative AI-powered Smart Stadium Operations Platform** built for **Google Prompt Wars Challenge 04**.
+
+The platform assists:
+
+- 👥 Fans
+- 🦺 Volunteers
+- 🏟 Stadium Staff
+- 🚓 Security Teams
+- 📊 Operations Control Rooms
+
+by providing intelligent, multilingual, real-time assistance using Google Gemini AI.
+
+The goal is to improve:
+
+- Smart Stadium Navigation
+- Crowd Management
+- Emergency Response
+- Accessibility
+- Transportation Guidance
+- Sustainability
+- Volunteer Assistance
+- Operations Intelligence
+- Real-time Decision Support
+
+for the **FIFA World Cup 2026**.
+
+---
+
+# 🏆 PromptWars Virtual Participation
+
+<div align="center">
+
+### Build • Deploy • Win From Anywhere
+
+</div>
+
+This repository is actively being developed as part of **PromptWars: Virtual India**.
+
+| Event | Details |
+|--------|---------|
+| Organizer | Google for Developers × Hack2Skill |
+| Event | PromptWars Virtual |
+| Region | 🇮🇳 India Only |
+| Format | Bi-weekly Virtual Hackathon |
+| Development Style | Prompt-first Engineering |
+| AI Platform | Google Gemini |
+| Workflow | Google Antigravity |
+
+**Official Event**
+
+https://promptwars.in/promptwarsVirtual.html
+
+---
+
+# 📅 How The 14-Day Cycle Works
+
+| Phase | Timeline | Description |
+|--------|----------|-------------|
+| 🚀 Challenge Release | Day 1 (Monday) | A new real-world AI challenge is released. |
+| 💻 Building Phase | Day 1 – Day 12 | Build a production-ready solution using Google Gemini and prompt-first workflows. |
+| 📤 Submission Phase | By Day 13 | Submit source code, live demo, blog and LinkedIn Build-in-Public post. |
+| 🏅 Evaluation | Day 14 | Experts review projects and update the leaderboard. |
+
+---
+
+**Live URL:** https://pitch-ops.vercel.app/
 
 ---
 
@@ -174,3 +268,43 @@ Environment (auto-managed by Lovable Cloud):
 ## License
 
 Prototype built for Google Prompt Wars Challenge 04. FIFA and tournament marks are property of their respective owners and are not used in this project.
+
+---
+
+# 👨‍💻 Developer
+
+<div align="center">
+
+### © Made with ❤️ by Saurabh Kumar. All Rights Reserved 2025
+
+<a href="https://github.com/Saurabhtbj1201">
+  <img src="https://github.com/Saurabhtbj1201.png" width="120" style="border-radius:50%;" alt="Saurabh Kumar"/>
+</a>
+
+## [Saurabh Kumar](https://github.com/Saurabhtbj1201)
+
+<a href="https://github.com/Saurabhtbj1201">
+<img src="https://img.shields.io/github/followers/Saurabhtbj1201?label=Follow&style=social"/>
+</a>
+
+### 🔗 Connect With Me
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/saurabhtbj1201)
+
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/saurabhtbj1201)
+
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/saurabhtbj1201)
+
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://facebook.com/saurabh.tbj)
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-FF5722?style=for-the-badge&logo=googlechrome&logoColor=white)](https://gu-saurabh.site)
+
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/9798024301)
+
+---
+
+⭐ If you found this project useful, consider giving it a Star!
+
+Built with ❤️ using Google Gemini, React, TanStack Start and Lovable Cloud.
+
+</div>
