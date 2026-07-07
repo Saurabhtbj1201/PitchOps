@@ -1,0 +1,126 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Smart Stadiums design system — dark operations aesthetic
+ * Deep teal + tournament gold on a near-black canvas.
+ * All colors use oklch, mapped to semantic Tailwind utilities.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+:root {
+  --radius: 0.75rem;
+  /* Near-black canvas with a subtle teal tint */
+  --background: oklch(0.17 0.02 190);
+  --foreground: oklch(0.97 0.01 90);
+  --card: oklch(0.22 0.025 190);
+  --card-foreground: oklch(0.97 0.01 90);
+  --popover: oklch(0.22 0.025 190);
+  --popover-foreground: oklch(0.97 0.01 90);
+  /* Tournament gold */
+  --primary: oklch(0.83 0.16 85);
+  --primary-foreground: oklch(0.2 0.03 190);
+  /* Deep teal */
+  --secondary: oklch(0.32 0.06 190);
+  --secondary-foreground: oklch(0.97 0.01 90);
+  --muted: oklch(0.25 0.02 190);
+  --muted-foreground: oklch(0.72 0.02 90);
+  --accent: oklch(0.42 0.11 190);
+  --accent-foreground: oklch(0.97 0.01 90);
+  --destructive: oklch(0.62 0.24 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.72 0.16 155);
+  --success-foreground: oklch(0.15 0.02 155);
+  --warning: oklch(0.8 0.16 65);
+  --warning-foreground: oklch(0.2 0.03 65);
+  --border: oklch(0.32 0.03 190);
+  --input: oklch(0.28 0.03 190);
+  --ring: oklch(0.83 0.16 85);
+  --chart-1: oklch(0.83 0.16 85);
+  --chart-2: oklch(0.72 0.15 190);
+  --chart-3: oklch(0.68 0.2 30);
+  --chart-4: oklch(0.72 0.16 155);
+  --chart-5: oklch(0.65 0.2 300);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Large-text accessibility mode */
+  html[data-large-text="true"] {
+    font-size: 18px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@utility gradient-pitch {
+  background-image: radial-gradient(ellipse at top, oklch(0.32 0.06 190 / 0.6), transparent 60%),
+    radial-gradient(ellipse at bottom right, oklch(0.42 0.11 190 / 0.35), transparent 60%);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 20px oklch(0.83 0.16 85 / 0.4);
+}
