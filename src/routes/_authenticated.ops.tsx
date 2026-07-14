@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { StadiumMap } from "@/components/StadiumMap";
+import { Kpi } from "@/components/Kpi";
 import { generateOpsBrief } from "@/lib/ops.functions";
 import { translateBroadcast } from "@/lib/broadcast.functions";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
@@ -48,7 +49,10 @@ export const Route = createFileRoute("/_authenticated/ops")({
   head: () => ({
     meta: [
       { title: "Ops Control — PitchOps" },
-      { name: "description", content: "Real-time stadium ops dashboard with Gemini-powered decision support." },
+      {
+        name: "description",
+        content: "Real-time stadium ops dashboard with Gemini-powered decision support.",
+      },
     ],
   }),
   component: OpsPage,
@@ -85,7 +89,8 @@ function OpsPage() {
   const { data: sections } = useQuery({
     queryKey: ["sections", venueId],
     queryFn: async () =>
-      (await supabase.from("sections").select("*").eq("venue_id", venueId)).data as Section[] ?? [],
+      ((await supabase.from("sections").select("*").eq("venue_id", venueId)).data as Section[]) ??
+      [],
     enabled: !!venueId,
   });
   const { data: metrics } = useQuery({
@@ -93,7 +98,10 @@ function OpsPage() {
     queryFn: async () => {
       const ids = (sections ?? []).map((s) => s.id);
       if (!ids.length) return [];
-      return (await supabase.from("venue_metrics").select("*").in("section_id", ids)).data as Metric[] ?? [];
+      return (
+        ((await supabase.from("venue_metrics").select("*").in("section_id", ids))
+          .data as Metric[]) ?? []
+      );
     },
     enabled: !!(sections && sections.length),
     refetchInterval: 5000,
@@ -103,10 +111,8 @@ function OpsPage() {
     if (!venueId) return;
     const ch = supabase
       .channel("ops_metrics_" + venueId)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "venue_metrics" },
-        () => qc.invalidateQueries({ queryKey: ["ops_metrics", venueId] }),
+      .on("postgres_changes", { event: "*", schema: "public", table: "venue_metrics" }, () =>
+        qc.invalidateQueries({ queryKey: ["ops_metrics", venueId] }),
       )
       .subscribe();
     return () => {
@@ -119,13 +125,15 @@ function OpsPage() {
     queryFn: async () => {
       if (!venueId) return [];
       return (
-        (await supabase
-          .from("incidents")
-          .select("*")
-          .eq("venue_id", venueId)
-          .neq("status", "resolved")
-          .order("created_at", { ascending: false })
-          .limit(20)).data as Incident[] ?? []
+        ((
+          await supabase
+            .from("incidents")
+            .select("*")
+            .eq("venue_id", venueId)
+            .neq("status", "resolved")
+            .order("created_at", { ascending: false })
+            .limit(20)
+        ).data as Incident[]) ?? []
       );
     },
     enabled: !!venueId,
@@ -176,9 +184,14 @@ function OpsPage() {
   };
 
   const avgOccupancy = metrics?.length
-    ? Math.round((metrics as Metric[]).reduce((s: number, m: Metric) => s + m.occupancy_pct, 0) / metrics.length)
+    ? Math.round(
+        (metrics as Metric[]).reduce((s: number, m: Metric) => s + m.occupancy_pct, 0) /
+          metrics.length,
+      )
     : 0;
-  const maxWait = metrics?.length ? Math.max(...(metrics as Metric[]).map((m: Metric) => m.gate_wait_s)) : 0;
+  const maxWait = metrics?.length
+    ? Math.max(...(metrics as Metric[]).map((m: Metric) => m.gate_wait_s))
+    : 0;
 
   // Sustainability KPIs — synthesized deterministically from live metrics.
   const kpis = {
@@ -196,11 +209,14 @@ function OpsPage() {
           <p className="text-sm text-muted-foreground">Real-time telemetry · AI decision support</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <label htmlFor="venueSelect" className="sr-only">
+            Venue
+          </label>
           <select
+            id="venueSelect"
             value={venueId}
             onChange={(e) => setVenueId(e.target.value)}
             className="rounded-md border border-input bg-background px-2 py-1.5 text-sm"
-            aria-label="Venue"
           >
             {(venues ?? []).map((v) => (
               <option key={v.id} value={v.id}>
@@ -221,9 +237,21 @@ function OpsPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-4">
-        <Kpi label="Avg occupancy" value={`${avgOccupancy}%`} accent={avgOccupancy > 80 ? "warn" : "ok"} />
-        <Kpi label="Longest gate wait" value={`${maxWait}s`} accent={maxWait > 240 ? "warn" : "ok"} />
-        <Kpi label="Open incidents" value={String(incidents?.length ?? 0)} accent={(incidents?.length ?? 0) > 3 ? "warn" : "ok"} />
+        <Kpi
+          label="Avg occupancy"
+          value={`${avgOccupancy}%`}
+          accent={avgOccupancy > 80 ? "warn" : "ok"}
+        />
+        <Kpi
+          label="Longest gate wait"
+          value={`${maxWait}s`}
+          accent={maxWait > 240 ? "warn" : "ok"}
+        />
+        <Kpi
+          label="Open incidents"
+          value={String(incidents?.length ?? 0)}
+          accent={(incidents?.length ?? 0) > 3 ? "warn" : "ok"}
+        />
         <Kpi label="Sections" value={String(sections?.length ?? 0)} />
       </div>
 
@@ -233,10 +261,13 @@ function OpsPage() {
             <Zap className="h-4 w-4 text-primary" aria-hidden />
             Live crowd heatmap
           </h2>
-          <StadiumMap sections={(sections ?? []) as Section[]} metrics={(metrics ?? []) as Metric[]} />
+          <StadiumMap
+            sections={(sections ?? []) as Section[]}
+            metrics={(metrics ?? []) as Metric[]}
+          />
           <ul className="mt-3 grid gap-1 text-xs">
-            {(sections ?? [] as Section[]).map((s: Section) => {
-              const m = (metrics ?? [] as Metric[]).find((mm: Metric) => mm.section_id === s.id);
+            {(sections ?? ([] as Section[])).map((s: Section) => {
+              const m = (metrics ?? ([] as Metric[])).find((mm: Metric) => mm.section_id === s.id);
               return (
                 <li key={s.id} className="flex justify-between border-b border-border/50 py-1">
                   <span>
@@ -268,7 +299,8 @@ function OpsPage() {
           </div>
           {!briefData && !briefBusy && (
             <p className="text-xs text-muted-foreground">
-              Click Generate for a Gemini-powered decision brief grounded in current metrics and open incidents.
+              Click Generate for a Gemini-powered decision brief grounded in current metrics and
+              open incidents.
             </p>
           )}
           {briefData && (
@@ -297,17 +329,24 @@ function OpsPage() {
                     Recommendations
                   </h3>
                   <ul className="mt-1 space-y-2">
-                    {briefData.recommendations.map((r: any, i: number) => (
-                      <li key={i} className="rounded-md border border-border bg-background p-2">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">{r.action}</span>
-                          <span className={"rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase " + priorityColor(r.priority)}>
-                            {r.priority}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-xs text-muted-foreground">{r.why}</p>
-                      </li>
-                    ))}
+                    {briefData.recommendations.map(
+                      (r: { action: string; why: string; priority: string }, i: number) => (
+                        <li key={i} className="rounded-md border border-border bg-background p-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{r.action}</span>
+                            <span
+                              className={
+                                "rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase " +
+                                priorityColor(r.priority)
+                              }
+                            >
+                              {r.priority}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs text-muted-foreground">{r.why}</p>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               )}
@@ -317,12 +356,19 @@ function OpsPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        <section aria-labelledby="broadcast" className="rounded-xl border border-border bg-card p-4">
+        <section
+          aria-labelledby="broadcast"
+          className="rounded-xl border border-border bg-card p-4"
+        >
           <h2 id="broadcast" className="mb-2 flex items-center gap-2 text-sm font-semibold">
             <Megaphone className="h-4 w-4 text-primary" aria-hidden />
             Multilingual broadcast composer
           </h2>
+          <label htmlFor="broadcastText" className="sr-only">
+            Broadcast Message
+          </label>
           <textarea
+            id="broadcastText"
             value={bText}
             onChange={(e) => setBText(e.target.value)}
             rows={3}
@@ -340,9 +386,7 @@ function OpsPage() {
                 aria-pressed={bTone === t}
                 className={
                   "rounded-full px-2.5 py-0.5 text-xs font-medium " +
-                  (bTone === t
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-border")
+                  (bTone === t ? "bg-primary text-primary-foreground" : "border border-border")
                 }
               >
                 {t}
@@ -384,7 +428,9 @@ function OpsPage() {
             <div className="mt-3 space-y-2 text-sm">
               {Object.entries(bResult).map(([code, text]) => (
                 <div key={code} className="rounded-md border border-border bg-background p-2">
-                  <div className="text-[10px] font-semibold uppercase text-muted-foreground">{code}</div>
+                  <div className="text-[10px] font-semibold uppercase text-muted-foreground">
+                    {code}
+                  </div>
                   <div>{text}</div>
                 </div>
               ))}
@@ -404,37 +450,11 @@ function OpsPage() {
             <Kpi label="Transit share" value={`${kpis.transitPct}%`} compact />
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Derived from live occupancy and transport modeling. Trend commentary appears in the Ops Brief.
+            Derived from live occupancy and transport modeling. Trend commentary appears in the Ops
+            Brief.
           </p>
         </section>
       </div>
-    </div>
-  );
-}
-
-function Kpi({
-  label,
-  value,
-  accent,
-  compact,
-}: {
-  label: string;
-  value: string;
-  accent?: "ok" | "warn";
-  compact?: boolean;
-}) {
-  return (
-    <div
-      className={
-        "rounded-xl border border-border bg-card " +
-        (compact ? "p-2" : "p-4") +
-        (accent === "warn" ? " ring-2 ring-warning/40" : "")
-      }
-    >
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-        {label}
-      </div>
-      <div className={"mt-0.5 font-bold " + (compact ? "text-lg" : "text-2xl")}>{value}</div>
     </div>
   );
 }

@@ -11,7 +11,10 @@ export const Route = createFileRoute("/_authenticated/staff")({
   head: () => ({
     meta: [
       { title: "Staff Console — PitchOps" },
-      { name: "description", content: "Volunteer & staff incident reporting, SOP lookup, and triage." },
+      {
+        name: "description",
+        content: "Volunteer & staff incident reporting, SOP lookup, and triage.",
+      },
     ],
   }),
   component: StaffPage,
@@ -25,7 +28,7 @@ type Incident = {
   description: string;
   section_id: string | null;
   created_at: string;
-  ai_classification: any;
+  ai_classification: { kind: string; severity: string; priority_reason: string } | null;
 };
 type SopRow = { id: string; kind: string; title: string; body: string; escalation: string };
 
@@ -109,7 +112,10 @@ function StaffPage() {
     }
   };
 
-  const setStatus = async (id: string, status: "new" | "dispatched" | "in_progress" | "resolved") => {
+  const setStatus = async (
+    id: string,
+    status: "new" | "dispatched" | "in_progress" | "resolved",
+  ) => {
     try {
       await updateStatus({ data: { id, status } });
       qc.invalidateQueries({ queryKey: ["incidents", venueId] });
@@ -125,7 +131,9 @@ function StaffPage() {
           <h1 id="report" className="text-2xl font-bold tracking-tight">
             Staff console
           </h1>
-          <p className="text-sm text-muted-foreground">Log incidents. Look up SOPs. Triage assignments.</p>
+          <p className="text-sm text-muted-foreground">
+            Log incidents. Look up SOPs. Triage assignments.
+          </p>
         </div>
 
         <form onSubmit={submit} className="space-y-3 rounded-xl border border-border bg-card p-4">
@@ -188,7 +196,7 @@ function StaffPage() {
               className="rounded-md border border-input bg-background px-2 py-1 text-xs"
               aria-label="SOP kind"
             >
-              {(sops ?? []).map((s: any) => (
+              {(sops ?? []).map((s: SopRow) => (
                 <option key={s.id} value={s.kind}>
                   {s.title}
                 </option>
@@ -224,7 +232,10 @@ function StaffPage() {
                 </h3>
                 <ul className="space-y-2">
                   {items.map((i) => (
-                    <li key={i.id} className="rounded-md border border-border bg-background p-2 text-xs">
+                    <li
+                      key={i.id}
+                      className="rounded-md border border-border bg-background p-2 text-xs"
+                    >
                       <div className="mb-1 flex items-center justify-between">
                         <span className="font-semibold">{i.kind}</span>
                         <SeverityBadge severity={i.severity} />
@@ -268,5 +279,9 @@ function SeverityBadge({ severity }: { severity: string }) {
         : severity === "medium"
           ? "bg-accent text-accent-foreground"
           : "bg-muted text-muted-foreground";
-  return <span className={"rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase " + color}>{severity}</span>;
+  return (
+    <span className={"rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase " + color}>
+      {severity}
+    </span>
+  );
 }

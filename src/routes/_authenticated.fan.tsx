@@ -7,14 +7,19 @@ import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPPORTED_LANGUAGES, RTL_LANGUAGES } from "@/lib/languages";
 import { StadiumMap } from "@/components/StadiumMap";
+import { MetricPill } from "@/components/MetricPill";
+import { MessageBubble } from "@/components/MessageBubble";
 import { Send, Accessibility, Type, CalendarPlus, ExternalLink } from "lucide-react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/fan")({
   head: () => ({
     meta: [
       { title: "Fan Companion — PitchOps" },
-      { name: "description", content: "Multilingual matchday assistant: navigation, gate waits, accessibility, transport." },
+      {
+        name: "description",
+        content:
+          "Multilingual matchday assistant: navigation, gate waits, accessibility, transport.",
+      },
     ],
   }),
   component: FanPage,
@@ -80,7 +85,10 @@ function FanPage() {
     queryFn: async () => {
       const ids = (sections ?? []).map((s) => s.id);
       if (ids.length === 0) return [];
-      const { data, error } = await supabase.from("venue_metrics").select("*").in("section_id", ids);
+      const { data, error } = await supabase
+        .from("venue_metrics")
+        .select("*")
+        .in("section_id", ids);
       if (error) throw error;
       return (data ?? []) as Metric[];
     },
@@ -140,7 +148,9 @@ function FanPage() {
             Your matchday
           </h1>
           <div className="flex items-center gap-2">
-            <label className="sr-only" htmlFor="lang">Language</label>
+            <label className="sr-only" htmlFor="lang">
+              Language
+            </label>
             <select
               id="lang"
               value={language}
@@ -168,9 +178,12 @@ function FanPage() {
 
         <div className="rounded-xl border border-border bg-card p-4">
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="text-sm">
-              <span className="mb-1 block font-medium">Venue</span>
+            <div>
+              <label htmlFor="venueSelect" className="mb-1 block text-sm font-medium">
+                Venue
+              </label>
               <select
+                id="venueSelect"
                 value={venueId}
                 onChange={(e) => {
                   setVenueId(e.target.value);
@@ -184,10 +197,13 @@ function FanPage() {
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="text-sm">
-              <span className="mb-1 block font-medium">Your section</span>
+            </div>
+            <div>
+              <label htmlFor="sectionSelect" className="mb-1 block text-sm font-medium">
+                Your section
+              </label>
               <select
+                id="sectionSelect"
                 value={sectionId}
                 onChange={(e) => setSectionId(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm"
@@ -199,20 +215,27 @@ function FanPage() {
                   </option>
                 ))}
               </select>
-            </label>
+            </div>
           </div>
 
           <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-            <MetricPill label="Occupancy" value={currentMetric ? `${currentMetric.occupancy_pct}%` : "—"} />
-            <MetricPill label="Gate wait" value={currentMetric ? `${currentMetric.gate_wait_s}s` : "—"} />
+            <MetricPill
+              label="Occupancy"
+              value={currentMetric ? `${currentMetric.occupancy_pct}%` : "—"}
+            />
+            <MetricPill
+              label="Gate wait"
+              value={currentMetric ? `${currentMetric.gate_wait_s}s` : "—"}
+            />
             <MetricPill label="Access" value={currentSection?.accessible ? "♿ Yes" : "No"} />
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <label className="flex items-center gap-1 text-xs">
+            <label htmlFor="amenitySelect" className="flex items-center gap-1 text-xs">
               <Accessibility className="h-3.5 w-3.5" aria-hidden /> Route to:
             </label>
             <select
+              id="amenitySelect"
               value={amenity}
               onChange={(e) => setAmenity(e.target.value)}
               className="rounded-md border border-input bg-background px-2 py-1 text-xs"
@@ -273,7 +296,10 @@ function FanPage() {
                * For production with a Maps Platform key, replace the src with:
                * https://www.google.com/maps/embed/v1/place?key=KEY&q=LAT,LNG
                */}
-              <div className="overflow-hidden rounded-lg border border-border" style={{ height: 220 }}>
+              <div
+                className="overflow-hidden rounded-lg border border-border"
+                style={{ height: 220 }}
+              >
                 <iframe
                   title={`Map of ${venue.name}`}
                   width="100%"
@@ -308,7 +334,10 @@ function FanPage() {
         </div>
       </section>
 
-      <section aria-labelledby="chat" className="flex h-[calc(100vh-8rem)] flex-col rounded-xl border border-border bg-card">
+      <section
+        aria-labelledby="chat"
+        className="flex h-[calc(100vh-8rem)] flex-col rounded-xl border border-border bg-card"
+      >
         <div className="border-b border-border p-4">
           <h2 id="chat" className="text-lg font-semibold">
             Ask the assistant
@@ -345,7 +374,9 @@ function FanPage() {
         </div>
 
         <form onSubmit={send} className="flex gap-2 border-t border-border p-3">
-          <label htmlFor="msg" className="sr-only">Your message</label>
+          <label htmlFor="msg" className="sr-only">
+            Your message
+          </label>
           <input
             id="msg"
             type="text"
@@ -365,42 +396,6 @@ function FanPage() {
           </button>
         </form>
       </section>
-    </div>
-  );
-}
-
-function MetricPill({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-background px-2 py-2">
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className="mt-0.5 text-sm font-semibold">{value}</div>
-    </div>
-  );
-}
-
-export function MessageBubble({ message }: { message: UIMessage }) {
-  const text = message.parts
-    .map((p) => (p.type === "text" ? p.text : ""))
-    .join("");
-  const isUser = message.role === "user";
-  return (
-    <div className={"flex " + (isUser ? "justify-end" : "justify-start")}>
-      <div
-        className={
-          "max-w-[85%] rounded-lg px-3 py-2 text-sm " +
-          (isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-background border border-border")
-        }
-      >
-        {isUser ? (
-          <p className="whitespace-pre-wrap">{text}</p>
-        ) : (
-          <div className="prose prose-sm prose-invert max-w-none prose-p:my-1 prose-ul:my-1">
-            <ReactMarkdown>{text || "…"}</ReactMarkdown>
-          </div>
-        )}
-      </div>
     </div>
   );
 }

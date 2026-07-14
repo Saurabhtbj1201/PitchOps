@@ -1,4 +1,3 @@
-
 # Smart Stadiums & Tournament Operations — FIFA World Cup 2026
 
 A GenAI-powered, multi-role assistant that optimizes stadium operations and elevates the tournament experience. Three personas share one app with a role switcher: **Fan**, **Volunteer/Staff**, and **Ops Control**. Powered by Google's Gemini (via Lovable AI Gateway) + Google Maps Platform, with simulated live venue telemetry and staff-reported incidents.
@@ -8,6 +7,7 @@ A GenAI-powered, multi-role assistant that optimizes stadium operations and elev
 ## 1. Product Scope (Broad MVP across all tracks)
 
 ### Fan role — matchday companion
+
 - **Multilingual chat assistant** (English, Spanish, French, Portuguese, Arabic, Hindi, Japanese) — Gemini natively translates; language selector in header.
 - **Smart indoor navigation**: pick your section/seat → get walking directions to nearest gate, restroom, halal/veg food, first aid, family room, prayer room. Rendered as a stylized stadium SVG map with highlighted route.
 - **Live gate & concession wait times** (simulated stream) — assistant recommends the least-congested gate near your seat.
@@ -16,12 +16,14 @@ A GenAI-powered, multi-role assistant that optimizes stadium operations and elev
 - **Match context**: schedule, group standings, "explain offside in my language" style Q&A.
 
 ### Volunteer / Staff role — field ops
+
 - **Incident reporter**: quick form (type, section, severity, notes, photo) → writes to Cloud DB, assistant classifies & routes.
 - **SOP lookup**: "Someone fainted in section 112" → Gemini retrieves the right SOP snippet + escalation contact.
 - **Task feed**: assigned tasks with priority, one-tap acknowledge/resolve.
 - **Multilingual fan-facing phrasebook**: staff types EN, gets voice-ready translation for the fan's language.
 
 ### Ops Control role — command center dashboard
+
 - **Live crowd heatmap** across sections (occupancy, ingress rate, egress rate).
 - **AI Decision Support panel**: Gemini streams recommendations grounded in current telemetry + incidents ("Gate C is at 92% — open overflow lane at Gate D; redirect fans via concourse ring").
 - **Incident triage board** (Kanban: new → dispatched → in-progress → resolved).
@@ -80,6 +82,7 @@ All tables in `public` with GRANTs + RLS + `has_role()` pattern.
 - `chat_threads(id, user_id, role_context)` + `chat_messages(id, thread_id, role, content jsonb, created_at)`
 
 RLS:
+
 - Fans read only public venue data + their own threads/incidents they reported.
 - Volunteers read/write incidents assigned to them + venue metrics read-only.
 - Ops (`has_role('ops')`) reads/writes everything at their venue.
@@ -127,6 +130,7 @@ RLS:
 - Role switcher = top-right segmented control; role is persisted in profile + URL (`/fan`, `/staff`, `/ops`).
 
 Routes:
+
 - `/` — landing + language + role picker
 - `/auth` — email/password + Google sign-in
 - `/_authenticated/fan` — fan companion
@@ -187,16 +191,16 @@ Routes:
 
 ## 11. Problem Statement Alignment (mapped to rubric)
 
-| Rubric track | How we hit it |
-|---|---|
-| Smart indoor navigation | Stadium SVG map + `findNearestAmenity` tool + accessibility routing |
-| Dynamic crowd management | Live `venue_metrics` + ops heatmap + AI "open overflow gate" recommendations |
+| Rubric track               | How we hit it                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| Smart indoor navigation    | Stadium SVG map + `findNearestAmenity` tool + accessibility routing              |
+| Dynamic crowd management   | Live `venue_metrics` + ops heatmap + AI "open overflow gate" recommendations     |
 | Real-time decision support | `/api/ops-brief` structured Gemini recommendations grounded in current telemetry |
-| Multi-language assistance | 7-language Gemini chat + broadcast composer with tone control |
-| Accessibility | Wheelchair routing, sensory-quiet zones, WCAG 2.2 AA, screen-reader-ready |
-| Transportation | Google Maps Routes + transit ETAs + park-and-ride |
-| Sustainability | Ops KPI panel with AI trend summary |
-| Operational intelligence | Incident triage board + SOP RAG + streaming assistant |
+| Multi-language assistance  | 7-language Gemini chat + broadcast composer with tone control                    |
+| Accessibility              | Wheelchair routing, sensory-quiet zones, WCAG 2.2 AA, screen-reader-ready        |
+| Transportation             | Google Maps Routes + transit ETAs + park-and-ride                                |
+| Sustainability             | Ops KPI panel with AI trend summary                                              |
+| Operational intelligence   | Incident triage board + SOP RAG + streaming assistant                            |
 
 ---
 

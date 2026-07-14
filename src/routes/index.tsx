@@ -31,7 +31,8 @@ function Landing() {
           FIFA World Cup 2026 · Smart Stadiums & Tournament Operations
         </p>
         <h1 className="text-balance text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
-          The GenAI copilot for <span className="text-primary text-glow">every seat in the stadium</span>.
+          The GenAI copilot for{" "}
+          <span className="text-primary text-glow">every seat in the stadium</span>.
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
           One assistant, three roles. Fans get multilingual navigation and accessibility support.

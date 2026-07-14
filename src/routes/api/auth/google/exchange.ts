@@ -35,7 +35,9 @@ export const Route = createFileRoute("/api/auth/google/exchange")({
 
           if (!code || !code_verifier || !redirect_uri) {
             return new Response(
-              JSON.stringify({ error: "Missing required fields: code, code_verifier, redirect_uri" }),
+              JSON.stringify({
+                error: "Missing required fields: code, code_verifier, redirect_uri",
+              }),
               { status: 400, headers: { "Content-Type": "application/json" } },
             );
           }
@@ -92,10 +94,10 @@ export const Route = createFileRoute("/api/auth/google/exchange")({
         } catch (err) {
           console.error("Google exchange route error:", err);
           const msg = err instanceof Error ? err.message : "Unknown server error";
-          return new Response(
-            JSON.stringify({ error: msg }),
-            { status: 500, headers: { "Content-Type": "application/json" } },
-          );
+          return new Response(JSON.stringify({ error: msg }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          });
         }
       },
     },

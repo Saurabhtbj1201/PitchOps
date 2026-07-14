@@ -40,14 +40,16 @@ describe("AI JSON parsing fallback (incident classification)", () => {
   });
 
   it("strips markdown code fences before parsing", () => {
-    const raw = '```json\n{"kind":"security","severity":"critical","priority_reason":"Suspicious item."}\n```';
+    const raw =
+      '```json\n{"kind":"security","severity":"critical","priority_reason":"Suspicious item."}\n```';
     const result = cleanAndParseJson(raw, INCIDENT_FALLBACK);
     expect(result.kind).toBe("security");
     expect(result.severity).toBe("critical");
   });
 
   it("strips code fences without language tag", () => {
-    const raw = '```\n{"kind":"crowd","severity":"medium","priority_reason":"Gate congestion."}\n```';
+    const raw =
+      '```\n{"kind":"crowd","severity":"medium","priority_reason":"Gate congestion."}\n```';
     const result = cleanAndParseJson(raw, INCIDENT_FALLBACK);
     expect(result.kind).toBe("crowd");
   });
@@ -108,7 +110,10 @@ describe("AI JSON parsing fallback (broadcast translation)", () => {
   const TRANSLATION_FALLBACK = { en: "Fallback message" };
 
   it("parses a multilingual translation map", () => {
-    const raw = JSON.stringify({ es: "Por favor dirígete al sector norte.", fr: "Merci de vous diriger vers le nord." });
+    const raw = JSON.stringify({
+      es: "Por favor dirígete al sector norte.",
+      fr: "Merci de vous diriger vers le nord.",
+    });
     const result = cleanAndParseJson(raw, TRANSLATION_FALLBACK);
     expect(result.es).toContain("norte");
     expect(result.fr).toContain("nord");

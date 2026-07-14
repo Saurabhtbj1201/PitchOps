@@ -64,11 +64,29 @@ describe("GenAI chat flow (mocked)", () => {
 
   it("surfaces 400 when messages array is missing", async () => {
     (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
-      new Response("Messages are required", { status: 400 }),
+      new Response("Invalid request body", { status: 400 }),
     );
     const res = await fetch("/api/chat", { method: "POST", body: "{}" });
     expect(res.status).toBe(400);
-    expect(await res.text()).toMatch(/messages/i);
+    expect(await res.text()).toMatch(/Invalid request body/i);
+  });
+
+  it("surfaces 400 when messages array is too large", async () => {
+    (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
+      new Response("Invalid request body", { status: 400 }),
+    );
+    // Simulating 51 messages (max is 50)
+    const messages = Array(51).fill({ role: "user", parts: [{ type: "text", text: "hi" }] });
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages,
+        role: "fan",
+        language: "en",
+      }),
+    });
+    expect(res.status).toBe(400);
   });
 
   it("handles gateway 402 credit-exhausted response", async () => {

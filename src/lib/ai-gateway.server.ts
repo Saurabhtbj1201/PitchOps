@@ -31,7 +31,7 @@ export function requireGeminiKey(): string {
     throw new Error(
       "GEMINI_API_KEY is not configured. " +
         "Get a free key at https://aistudio.google.com/app/apikey " +
-        "then add GEMINI_API_KEY=\"AIzaSy...\" to your .env file.",
+        'then add GEMINI_API_KEY="AIzaSy..." to your .env file.',
     );
   }
   return key;

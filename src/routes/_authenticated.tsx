@@ -1,4 +1,11 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  Link,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { LogOut, MapPinned, Users, Radio } from "lucide-react";
@@ -39,7 +46,12 @@ function AuthedLayout() {
   const canStaff = roles.includes("volunteer") || roles.includes("ops");
   const canOps = roles.includes("ops");
 
-  const nav: { to: "/fan" | "/staff" | "/ops"; label: string; icon: typeof MapPinned; locked: boolean }[] = [
+  const nav: {
+    to: "/fan" | "/staff" | "/ops";
+    label: string;
+    icon: typeof MapPinned;
+    locked: boolean;
+  }[] = [
     { to: "/fan", label: "Fan", icon: MapPinned, locked: false },
     { to: "/staff", label: "Staff", icon: Users, locked: !canStaff },
     { to: "/ops", label: "Ops", icon: Radio, locked: !canOps },
@@ -50,11 +62,17 @@ function AuthedLayout() {
       <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
           <Link to="/fan" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold text-sm">P</div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold text-sm">
+              P
+            </div>
             <span className="font-semibold tracking-tight">PitchOps</span>
           </Link>
 
-          <nav role="tablist" aria-label="Role" className="flex items-center gap-1 rounded-full border border-border bg-card p-1">
+          <nav
+            role="tablist"
+            aria-label="Role"
+            className="flex items-center gap-1 rounded-full border border-border bg-card p-1"
+          >
             {nav.map((n) => {
               const active = pathname.startsWith(n.to);
               return (

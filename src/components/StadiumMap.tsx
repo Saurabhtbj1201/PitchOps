@@ -52,14 +52,7 @@ export function StadiumMap({
     >
       <title>Stadium map</title>
       <desc>Green sections are below 65% occupancy, amber up to 85%, red above 85%.</desc>
-      <ellipse
-        cx="250"
-        cy="150"
-        rx="200"
-        ry="130"
-        fill="var(--color-secondary)"
-        opacity="0.4"
-      />
+      <ellipse cx="250" cy="150" rx="200" ry="130" fill="var(--color-secondary)" opacity="0.4" />
       <rect
         x="200"
         y="120"
@@ -69,14 +62,7 @@ export function StadiumMap({
         fill="var(--color-success)"
         opacity="0.55"
       />
-      <text
-        x="250"
-        y="155"
-        textAnchor="middle"
-        fill="currentColor"
-        fontSize="12"
-        opacity="0.7"
-      >
+      <text x="250" y="155" textAnchor="middle" fill="currentColor" fontSize="12" opacity="0.7">
         PITCH
       </text>
       {positions.map(({ section, cx, cy }) => {
@@ -118,9 +104,7 @@ export function StadiumMap({
             >
               {pct}%
             </text>
-            {section.accessible && (
-              <circle cx="40" cy="4" r="4" fill="var(--color-primary)" />
-            )}
+            {section.accessible && <circle cx="40" cy="4" r="4" fill="var(--color-primary)" />}
           </g>
         );
       })}

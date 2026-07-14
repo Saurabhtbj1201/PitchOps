@@ -12,7 +12,7 @@ const CreateInput = z.object({
 
 export const createIncident = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => CreateInput.parse(data))
+  .validator((data: unknown) => CreateInput.parse(data))
   .handler(async ({ data, context }) => {
     // Ask Gemini to classify the incident into kind + severity
     const gemini = createGeminiProvider();
@@ -26,7 +26,11 @@ export const createIncident = createServerFn({ method: "POST" })
 Report: """${data.description}"""`,
     });
 
-    const trimmed = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```$/, "").trim();
+    const trimmed = text
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```$/, "")
+      .trim();
     let classification: { kind: string; severity: string; priority_reason: string } = {
       kind: "other",
       severity: "medium",
@@ -34,7 +38,9 @@ Report: """${data.description}"""`,
     };
     try {
       classification = JSON.parse(trimmed);
-    } catch {}
+    } catch (err) {
+      console.warn("Failed to parse incident classification JSON", err);
+    }
 
     const { data: inserted, error } = await context.supabase
       .from("incidents")
@@ -62,7 +68,7 @@ const UpdateInput = z.object({
 
 export const updateIncidentStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => UpdateInput.parse(data))
+  .validator((data: unknown) => UpdateInput.parse(data))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("incidents")

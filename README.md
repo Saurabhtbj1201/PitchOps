@@ -71,15 +71,15 @@ for the **FIFA World Cup 2026**.
 
 This repository is actively being developed as part of **PromptWars: Virtual India**.
 
-| Event | Details |
-|--------|---------|
-| Organizer | Google for Developers × Hack2Skill |
-| Event | PromptWars Virtual |
-| Region | 🇮🇳 India Only |
-| Format | Bi-weekly Virtual Hackathon |
-| Development Style | Prompt-first Engineering |
-| AI Platform | Google Gemini |
-| Workflow | Google Antigravity |
+| Event             | Details                            |
+| ----------------- | ---------------------------------- |
+| Organizer         | Google for Developers × Hack2Skill |
+| Event             | PromptWars Virtual                 |
+| Region            | 🇮🇳 India Only                      |
+| Format            | Bi-weekly Virtual Hackathon        |
+| Development Style | Prompt-first Engineering           |
+| AI Platform       | Google Gemini                      |
+| Workflow          | Google Antigravity                 |
 
 **Official Event**
 
@@ -89,12 +89,12 @@ https://promptwars.in/promptwarsVirtual.html
 
 # 📅 How The 14-Day Cycle Works
 
-| Phase | Timeline | Description |
-|--------|----------|-------------|
-| 🚀 Challenge Release | Day 1 (Monday) | A new real-world AI challenge is released. |
-| 💻 Building Phase | Day 1 – Day 12 | Build a production-ready solution using Google Gemini and prompt-first workflows. |
-| 📤 Submission Phase | By Day 13 | Submit source code, live demo, blog and LinkedIn Build-in-Public post. |
-| 🏅 Evaluation | Day 14 | Experts review projects and update the leaderboard. |
+| Phase                | Timeline       | Description                                                                       |
+| -------------------- | -------------- | --------------------------------------------------------------------------------- |
+| 🚀 Challenge Release | Day 1 (Monday) | A new real-world AI challenge is released.                                        |
+| 💻 Building Phase    | Day 1 – Day 12 | Build a production-ready solution using Google Gemini and prompt-first workflows. |
+| 📤 Submission Phase  | By Day 13      | Submit source code, live demo, blog and LinkedIn Build-in-Public post.            |
+| 🏅 Evaluation        | Day 14         | Experts review projects and update the leaderboard.                               |
 
 ---
 
@@ -106,11 +106,11 @@ https://promptwars.in/promptwarsVirtual.html
 
 The problem statement asks for one solution that improves navigation, crowd management, accessibility, transport, sustainability, multilingual assistance, and real-time decision support during matchday. Rather than building three siloed apps, PitchOps ships **one app with three role-scoped experiences**:
 
-| Role | What they get |
-|---|---|
-| **Fan** | Multilingual matchday companion — chat in 7 languages, live gate/section metrics, wheelchair-accessible amenity routing, transit link to the venue, Google Calendar match-add. |
-| **Volunteer / Staff** | Incident reporter with automatic Gemini classification (kind + severity), SOP lookup, live Kanban triage board (new → dispatched → in-progress → resolved). |
-| **Ops Control** | Live crowd heatmap, streaming Gemini **Ops Brief** with prioritized recommendations grounded in current metrics + open incidents, multilingual PA broadcast composer with tone control, sustainability KPI panel. |
+| Role                  | What they get                                                                                                                                                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Fan**               | Multilingual matchday companion — chat in 7 languages, live gate/section metrics, wheelchair-accessible amenity routing, transit link to the venue, Google Calendar match-add.                                    |
+| **Volunteer / Staff** | Incident reporter with automatic Gemini classification (kind + severity), SOP lookup, live Kanban triage board (new → dispatched → in-progress → resolved).                                                       |
+| **Ops Control**       | Live crowd heatmap, streaming Gemini **Ops Brief** with prioritized recommendations grounded in current metrics + open incidents, multilingual PA broadcast composer with tone control, sustainability KPI panel. |
 
 ### Why "one app, three roles"?
 
@@ -166,16 +166,16 @@ The problem statement asks for one solution that improves navigation, crowd mana
 
 Every table has RLS + explicit GRANTs. Roles live in a separate `user_roles` table with a `has_role(user_id, role)` `SECURITY DEFINER` helper — never on the profile.
 
-| Table | Purpose |
-|---|---|
-| `profiles` | Display name, preferred language, accessibility prefs. |
-| `user_roles` (+ `app_role` enum: `fan`/`volunteer`/`ops`) | Role assignments. Auto-`fan` on sign-up via trigger. |
-| `venues`, `sections` | Seeded with MetLife Stadium & Estadio Azteca + sections. |
-| `venue_metrics` | Per-section live telemetry (occupancy, ingress/egress, gate wait). Realtime-enabled. |
-| `incidents` | Staff reports. AI classification stored as JSONB. Realtime-enabled. |
-| `sops` | Seeded SOPs (medical, crowd, lost child, accessibility, weather, security). |
-| `broadcasts` | Multilingual PA announcements composed by ops. |
-| `chat_threads` | Reserved for persisted conversations (not required for the current session-based demo). |
+| Table                                                     | Purpose                                                                                 |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `profiles`                                                | Display name, preferred language, accessibility prefs.                                  |
+| `user_roles` (+ `app_role` enum: `fan`/`volunteer`/`ops`) | Role assignments. Auto-`fan` on sign-up via trigger.                                    |
+| `venues`, `sections`                                      | Seeded with MetLife Stadium & Estadio Azteca + sections.                                |
+| `venue_metrics`                                           | Per-section live telemetry (occupancy, ingress/egress, gate wait). Realtime-enabled.    |
+| `incidents`                                               | Staff reports. AI classification stored as JSONB. Realtime-enabled.                     |
+| `sops`                                                    | Seeded SOPs (medical, crowd, lost child, accessibility, weather, security).             |
+| `broadcasts`                                              | Multilingual PA announcements composed by ops.                                          |
+| `chat_threads`                                            | Reserved for persisted conversations (not required for the current session-based demo). |
 
 ### Real-time updates
 
@@ -189,26 +189,26 @@ Every table has RLS + explicit GRANTs. Roles live in a separate `user_roles` tab
 
 ## 3. Google Services used
 
-| Service | Where |
-|---|---|
-| **Google Gemini** (`google/gemini-3-flash-preview`) via Lovable AI Gateway | All chat, classification, ops brief, translation. |
-| **Google OAuth** (managed by Lovable Cloud) | Sign in with Google on `/auth`. |
-| **Google Maps** (deep link) | Fan "Open transit directions" link with lat/lng of venue. Google Maps Platform connector can be plugged in for embedded maps and Places API (New) without code changes; the app is designed to consume `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY` when connected. |
-| **Google Calendar** (link template) | Fan "Add match to Google Calendar" — no OAuth required, uses public `calendar.google.com/render?action=TEMPLATE` URL. |
+| Service                                                                    | Where                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Google Gemini** (`google/gemini-3-flash-preview`) via Lovable AI Gateway | All chat, classification, ops brief, translation.                                                                                                                                                                                                                       |
+| **Google OAuth** (managed by Lovable Cloud)                                | Sign in with Google on `/auth`.                                                                                                                                                                                                                                         |
+| **Google Maps** (deep link)                                                | Fan "Open transit directions" link with lat/lng of venue. Google Maps Platform connector can be plugged in for embedded maps and Places API (New) without code changes; the app is designed to consume `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY` when connected. |
+| **Google Calendar** (link template)                                        | Fan "Add match to Google Calendar" — no OAuth required, uses public `calendar.google.com/render?action=TEMPLATE` URL.                                                                                                                                                   |
 
 ---
 
 ## 4. Rubric mapping (Problem Statement Alignment)
 
-| Focus area | Where in the app |
-|---|---|
-| **Code Quality** | Strict TS, TanStack Start server-fn boundaries, Zod validation, `useSuspenseQuery` / TanStack Query, split component files (`StadiumMap`), typed AI SDK usage. |
-| **Security** | Roles in separate table + `has_role()` security-definer, RLS on every table, `LOVABLE_API_KEY` server-only, Zod validation, HMAC-eligible cron route, `requireSupabaseAuth` middleware on every write server function, no `dangerouslySetInnerHTML`. |
-| **Efficiency** | Gemini Flash (cheap + fast), Supabase Realtime instead of polling, TanStack Query cache, SVG map (no heavy 3D), lazy per-role routes, single provider per request. |
-| **Testing** | Manual E2E is documented in Demo Script below; run `bun run build` and `bun run lint` in CI. Playwright hooks in place. |
-| **Accessibility** | WCAG 2.2 AA color contrast, keyboard focus rings, skip-to-content link, ARIA live regions on chat + Ops brief, semantic landmarks, alt/`<title>`/`<desc>` on the SVG map, RTL support for Arabic, large-text toggle, `prefers-reduced-motion` respected. |
-| **Google Services** | Gemini (chat/classification/brief/translate), Google OAuth, Google Maps deep link, Google Calendar link template. |
-| **Problem Statement Alignment** | Every rubric track is covered — see the table in this README under "Rubric mapping". |
+| Focus area                      | Where in the app                                                                                                                                                                                                                                         |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code Quality**                | Strict TS, TanStack Start server-fn boundaries, Zod validation, `useSuspenseQuery` / TanStack Query, split component files (`StadiumMap`), typed AI SDK usage.                                                                                           |
+| **Security**                    | Roles in separate table + `has_role()` security-definer, RLS on every table, `LOVABLE_API_KEY` server-only, Zod validation, HMAC-eligible cron route, `requireSupabaseAuth` middleware on every write server function, no `dangerouslySetInnerHTML`.     |
+| **Efficiency**                  | Gemini Flash (cheap + fast), Supabase Realtime instead of polling, TanStack Query cache, SVG map (no heavy 3D), lazy per-role routes, single provider per request.                                                                                       |
+| **Testing**                     | Manual E2E is documented in Demo Script below; run `bun run build` and `bun run lint` in CI. Playwright hooks in place.                                                                                                                                  |
+| **Accessibility**               | WCAG 2.2 AA color contrast, keyboard focus rings, skip-to-content link, ARIA live regions on chat + Ops brief, semantic landmarks, alt/`<title>`/`<desc>` on the SVG map, RTL support for Arabic, large-text toggle, `prefers-reduced-motion` respected. |
+| **Google Services**             | Gemini (chat/classification/brief/translate), Google OAuth, Google Maps deep link, Google Calendar link template.                                                                                                                                        |
+| **Problem Statement Alignment** | Every rubric track is covered — see the table in this README under "Rubric mapping".                                                                                                                                                                     |
 
 ---
 
@@ -247,6 +247,7 @@ bun run lint      # eslint
 ```
 
 Environment (auto-managed by Lovable Cloud):
+
 - `LOVABLE_API_KEY` — for Gemini via Lovable AI Gateway (server-only)
 - `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY` — database + auth
 - Frontend uses `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`

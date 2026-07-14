@@ -13,7 +13,7 @@ const TranslateInput = z.object({
 
 export const translateBroadcast = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => TranslateInput.parse(data))
+  .validator((data: unknown) => TranslateInput.parse(data))
   .handler(async ({ data, context }) => {
     const { data: isOps } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
@@ -41,7 +41,11 @@ ${data.text}
       prompt,
     });
 
-    const trimmed = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```$/, "").trim();
+    const trimmed = text
+      .trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```$/, "")
+      .trim();
     let translations: Record<string, string> = {};
     try {
       translations = JSON.parse(trimmed);
