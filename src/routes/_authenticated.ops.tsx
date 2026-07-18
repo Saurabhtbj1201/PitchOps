@@ -10,40 +10,9 @@ import { Kpi } from "@/components/Kpi";
 import { generateOpsBrief } from "@/lib/ops.functions";
 import { translateBroadcast } from "@/lib/broadcast.functions";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
-import { Zap, Megaphone, Leaf, RefreshCcw, Sparkles } from "lucide-react";
+import { Zap, Megaphone, Leaf, RefreshCcw, Sparkles, AlertTriangle } from "lucide-react";
 
-/** Section row from the sections table */
-type Section = {
-  id: string;
-  label: string;
-  tier: string;
-  nearest_gate: string;
-  accessible: boolean;
-  capacity: number;
-  venue_id: string;
-};
-
-/** Metric row from the venue_metrics table */
-type Metric = {
-  id: string;
-  section_id: string;
-  occupancy_pct: number;
-  ingress_rate: number;
-  egress_rate: number;
-  gate_wait_s: number;
-  updated_at: string;
-};
-
-/** Incident row from the incidents table */
-type Incident = {
-  id: string;
-  kind: string;
-  severity: string;
-  status: string;
-  description: string;
-  created_at: string;
-  venue_id: string;
-};
+import { Section, Metric, Incident } from "@/types";
 
 export const Route = createFileRoute("/_authenticated/ops")({
   head: () => ({
@@ -201,6 +170,25 @@ function OpsPage() {
     transitPct: 62,
   };
 
+  const alerts: string[] = [];
+  if (avgOccupancy > 80) {
+    alerts.push(
+      `High average stadium occupancy detected (${avgOccupancy}%). Consider opening overflow concourse lanes.`,
+    );
+  }
+  if (maxWait > 240) {
+    alerts.push(
+      `Longest gate wait time has exceeded 4 minutes (Max: ${maxWait}s). Recommend opening additional ticket scanning lanes.`,
+    );
+  }
+  const highOccupancySections = (metrics ?? []).filter((m: Metric) => m.occupancy_pct > 85);
+  highOccupancySections.forEach((m: Metric) => {
+    const secLabel = sections?.find((s) => s.id === m.section_id)?.label ?? "unknown";
+    alerts.push(
+      `Section ${secLabel} occupancy is critical at ${m.occupancy_pct}%. Monitor crowd flow.`,
+    );
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -235,6 +223,28 @@ function OpsPage() {
           </button>
         </div>
       </div>
+
+      {alerts.length > 0 && (
+        <section
+          aria-labelledby="ops-alerts"
+          className="rounded-xl border border-destructive/30 bg-destructive/10 p-4"
+        >
+          <h2
+            id="ops-alerts"
+            className="text-sm font-semibold text-destructive flex items-center gap-2"
+          >
+            <AlertTriangle className="h-4 w-4" aria-hidden />
+            Operational Alerts ({alerts.length})
+          </h2>
+          <ul className="mt-2 space-y-1.5 text-xs text-destructive/90">
+            {alerts.map((alert, i) => (
+              <li key={i} className="list-disc pl-1 ml-4">
+                {alert}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-4">
         <Kpi

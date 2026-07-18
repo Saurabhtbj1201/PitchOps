@@ -1,14 +1,6 @@
 import { useMemo } from "react";
 
-type Section = {
-  id: string;
-  label: string;
-  tier: string;
-  accessible: boolean;
-  nearest_gate: string;
-};
-
-type Metric = { section_id: string; occupancy_pct: number; gate_wait_s?: number };
+import { Section, Metric } from "@/types";
 
 export function StadiumMap({
   sections,

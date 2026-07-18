@@ -20,17 +20,7 @@ export const Route = createFileRoute("/_authenticated/staff")({
   component: StaffPage,
 });
 
-type Incident = {
-  id: string;
-  kind: string;
-  severity: string;
-  status: string;
-  description: string;
-  section_id: string | null;
-  created_at: string;
-  ai_classification: { kind: string; severity: string; priority_reason: string } | null;
-};
-type SopRow = { id: string; kind: string; title: string; body: string; escalation: string };
+import { Incident, SopRow } from "@/types";
 
 function StaffPage() {
   const qc = useQueryClient();

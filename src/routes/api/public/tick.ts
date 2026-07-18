@@ -27,9 +27,9 @@ export const Route = createFileRoute("/api/public/tick")({
           };
         });
 
-        for (const u of updates) {
-          await supabaseAdmin.from("venue_metrics").update(u).eq("id", u.id);
-        }
+        await Promise.all(
+          updates.map((u) => supabaseAdmin.from("venue_metrics").update(u).eq("id", u.id)),
+        );
         return Response.json({ updated: updates.length });
       },
     },

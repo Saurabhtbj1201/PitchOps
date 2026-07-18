@@ -25,15 +25,7 @@ export const Route = createFileRoute("/_authenticated/fan")({
   component: FanPage,
 });
 
-type Section = {
-  id: string;
-  label: string;
-  tier: string;
-  accessible: boolean;
-  nearest_gate: string;
-  venue_id: string;
-};
-type Metric = { section_id: string; occupancy_pct: number; gate_wait_s: number };
+import { Section, Metric } from "@/types";
 
 function FanPage() {
   const [language, setLanguage] = useState("en");
